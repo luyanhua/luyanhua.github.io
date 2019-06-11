@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta name="keywords" content="js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则学习">
+<meta property="og:url" content="http://yoursite.com/2018/08/24/reg/index.html">
+<meta property="og:site_name" content="露露的笔记">
+<meta property="og:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-06T06:55:50.658Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="正则学习">
+<meta name="twitter:description" content="12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182838485868788899091929394959697989910010110210">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2018/08/24/reg/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>正则学习 | 露露的笔记</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">露露的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/24/reg/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content>
+      <meta itemprop="description" content="lulu">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="露露的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">正则学习
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-08-24 14:13:23" itemprop="dateCreated datePublished" datetime="2018-08-24T14:13:23+08:00">2018-08-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-06 14:55:50" itemprop="dateModified" datetime="2019-06-06T14:55:50+08:00">2019-06-06</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/js/" itemprop="url" rel="index"><span itemprop="name">js</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">           //replace 参数1：要被替换的字符(可以是正则表达式)  参数2：替换的字符</span><br><span class="line">           //将下面语句中的 is 注意不包含this中的is 替换成 IS</span><br><span class="line">           // \b代表单词边界 这里指单独的is </span><br><span class="line">           var str = &apos;He is a Boy,This is a Dog&apos;;</span><br><span class="line">           var reg = /\bis\b/g</span><br><span class="line">           console.log(str.replace(reg, &apos;IS&apos;)) //He IS a Boy,This IS a Dog</span><br><span class="line"></span><br><span class="line">           //用函数表达式  因为字符串的转义问题，字符串的两个\\实际上是一个\。</span><br><span class="line">           var reg1 = RegExp(&apos;\\bis\\b&apos;, &apos;g&apos;);</span><br><span class="line">           console.log(str.replace(reg1, &apos;IS&apos;)) //He IS a Boy,This IS a Dog</span><br><span class="line"></span><br><span class="line">           //非单词边界 比如我只想替换 this 中的 is </span><br><span class="line">           var reg2 = /\Bis\b/g</span><br><span class="line">           console.log(str.replace(reg2, &apos;IS&apos;)); //He is a Boy,ThIS is a Dog</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       &#123;</span><br><span class="line">           //[]中括号代表或者 “|” 也可以</span><br><span class="line">           //匹配  年份-月份-日  或者 年份/月份/日</span><br><span class="line">           var reg = /^\d&#123;4&#125;[-/]\d&#123;2&#125;[-/]\d&#123;2&#125;$/</span><br><span class="line">           var regx = /^\d&#123;4&#125;-|\/\d&#123;2&#125;[-/]\d&#123;2&#125;$/</span><br><span class="line">           console.log(reg.test(&apos;2008-08-12&apos;))  //true</span><br><span class="line">           console.log(&apos;---------------&apos;, regx.test(&apos;2008-08-12&apos;))  //true</span><br><span class="line">           //匹配a或者b或者c忽略大小写</span><br><span class="line">           var reg2 = /[abcd]/gi</span><br><span class="line">           console.log(&apos;a1b2c3D4&apos;.replace(reg2, &apos;0&apos;)) //01020304</span><br><span class="line"></span><br><span class="line">           //字符取反 不是a或者b或c或d的 替换</span><br><span class="line">           var reg3 = /[^abcd]/gi</span><br><span class="line">           console.log(&apos;a1b2c3D4&apos;.replace(reg3, 0)) //a0b0c0D0</span><br><span class="line"></span><br><span class="line">           //范围类 匹配大小写a-z 和 ‘-’</span><br><span class="line">           var reg4 = /[a-zA-Z-]/g</span><br><span class="line">           console.log(&apos;a1b2c3D4-&apos;.replace(reg4, 0)) //010203040</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       &#123;</span><br><span class="line">           //匹配一个ab+数字+任意字符</span><br><span class="line">           var reg = /ab\d./</span><br><span class="line">           console.log(reg.test(&apos;ab9999aaa&apos;)) //true</span><br><span class="line"></span><br><span class="line">           //贪婪模式 匹配尽量多</span><br><span class="line">           var reg2 = /\d&#123;3,5&#125;/g</span><br><span class="line">           console.log(&apos;123456789&apos;.match(reg2)) //[&quot;12345&quot;, &quot;6789&quot;]</span><br><span class="line"></span><br><span class="line">           //非贪婪模式  量词后边加问号 match返回存放匹配结果的数组。该数组的内容依赖于 regexp 是否具有全局标志 g。</span><br><span class="line">           var reg3 = /\d&#123;3,5&#125;?/g</span><br><span class="line">           console.log(&apos;123456789&apos;.match(reg2)) //[&quot;123&quot;, &quot;456&quot;, &quot;789&quot;]</span><br><span class="line"></span><br><span class="line">           //分组 </span><br><span class="line"></span><br><span class="line">           var reg4 = /Br(on|ca)sper/g</span><br><span class="line">           console.log(&apos;BronsperBrcasper&apos;.replace(reg4, &apos;0&apos;)); //00</span><br><span class="line"></span><br><span class="line">           //反向引用</span><br><span class="line">           //将 2015-02-21 修改成 02/21/2015 $1...n 可以捕获分组  </span><br><span class="line">           //如果不想捕获 用 ?:   列(?:XXXXX)</span><br><span class="line">           var reg5 = /(\d&#123;4&#125;)-(\d&#123;2&#125;)-(\d&#123;2&#125;)/g</span><br><span class="line">           console.log(&apos;2015-02-21&apos;.replace(reg5, &apos;$2/$3/$1&apos;)); //02/21/2015</span><br><span class="line"></span><br><span class="line">           var r = &apos;2015-02-212015-03-21&apos;.match(reg5);</span><br><span class="line">           console.log(&apos;11111111&apos;, r); //[&quot;2015-02-21&quot;, &quot;2015-03-21&quot;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       &#123;</span><br><span class="line">           //断言</span><br><span class="line">           //匹配英文字符，他后边必须是个数字，但是数字不在匹配范围内</span><br><span class="line">           //？=\d后边是数字 ?!\d后边不是数字</span><br><span class="line">           var reg = /\w(?=\d)/g</span><br><span class="line">           var reg2 = /\w(?!\d)/g</span><br><span class="line">           console.log(&apos;a2bbc3&apos;.match(reg))    //[&quot;a&quot;, &quot;c&quot;]</span><br><span class="line">           //console.log(&apos;a2bbc3a&apos;.replace(reg2,&apos;0&apos;)) //a200c3</span><br><span class="line"></span><br><span class="line">           //如匹配姓zhao，但名字不叫xianlie的人</span><br><span class="line">           var reg2 = /zhao(?!xianlie)/g</span><br><span class="line"></span><br><span class="line">           console.log(&apos;zhaook,zhaoxianlie,liuxianlie&apos;.replace(reg2, &apos;wei&apos;))</span><br><span class="line">           //weiok,zhaoxianlie,liuxianlie</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">           //split 传入正则 匹配 , 或者 | 或者 *</span><br><span class="line">           console.log(&apos;a,b|c*d&apos;.split(/,|\*|\|/g)) //[&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">           //replace function 参数1：匹配到的字符串 参数2：分组内容，没有则忽略 参数3：匹配项的index 参数4：源字符串</span><br><span class="line">           let newStr = &apos;a1b2c3d4&apos;.replace(/\d/g, function (match, index, origin) &#123;</span><br><span class="line">               return parseInt(match) + 1</span><br><span class="line">           &#125;)</span><br><span class="line"></span><br><span class="line">           console.log(newStr) //a2b3c4d5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">           function getUrlParams(str) &#123;</span><br><span class="line">               //如果 regexp 没有标志 g，那么 match() 方法就只能在 stringObject 中执行一次匹配。如果没有找到任何匹配的文本， match() 将返回 null。否则，它将返回一个数组，其中存放了与它找到的匹配文本有关的信息。该数组的第 0 个元素存放的是匹配文本，而其余的元素存放的是与正则表达式的子表达式匹配的文本。除了这些常规的数组元素之外，返回的数组还含有两个对象属性。index 属性声明的是匹配文本的起始字符在 stringObject 中的位置，input 属性声明的是对 stringObject 的引用。</span><br><span class="line">               </span><br><span class="line">               //（^|&amp;）意思是从头开始匹配字符&amp;, =([^&amp;]*)意思是匹配=后面零个或多个不是&amp;的字符，直至碰到第一个&amp;为止，(&amp;|$)意思就是匹配最后一个&amp;，在正则表达式中，增加一个()代表着匹配数组中增加一个值, 因此代码中的正则匹配后数组中应包含4个值, 在getUrlParams(&quot;name&quot;)函数中，此时 r 获取到的数组应该是 [&quot;name=elephant&amp;&quot;, &quot;&quot;, &quot;elephant&quot;, &quot;&amp;&quot;]</span><br><span class="line">               </span><br><span class="line">               // 注意哦，，，如果正则没有 g  标志 match  返回的该数组的第 0 个元素存放的是匹配文本，而其余的元素存放的是与正则表达式的子表达式(就是括号)匹配的文本。</span><br><span class="line">               </span><br><span class="line">               var reg = new RegExp(&quot;(^|&amp;)&quot; + name + &quot;=([^&amp;]*)(&amp;|$)&quot;, &quot;i&quot;); //定义正则表达式 </span><br><span class="line">               var r = window.location.search.substr(1).match(reg);</span><br><span class="line">               if (r != null) return unescape(r[2]);</span><br><span class="line">               return null;</span><br><span class="line"></span><br><span class="line">               // return r &amp;&amp; decodeURIComponent(r[2]);</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           window.location = &quot;http://www.baidu.com?name=elephant&amp;age=25&amp;sex=male&quot;;</span><br><span class="line">           var name = getUrlParams(&quot;name&quot;); //elephant</span><br><span class="line">           var age = getUrlParams(&quot;age&quot;);   //25</span><br><span class="line">           var sex = getUrlParams(&quot;sex&quot;);　//male</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line">// 保存：删除关闭按钮</span><br><span class="line">var reg = /&lt;div\s+data\-del\=\&quot;(\w+)\&quot;[\s\S]+?&lt;\/div&gt;|&lt;span\s+data\-del=\&quot;(\w+)\&quot;[^&gt;]+&gt;&lt;\/span&gt;/g; </span><br><span class="line">// 替换前：</span><br><span class="line">// 图片：</span><br><span class="line">`&lt;div data-del=&quot;img&quot; class=&quot;_editor_title _editor_img_title&quot;&gt;</span><br><span class="line">  &lt;span data-del=&quot;img&quot; class=&quot;_editor_close&quot;&gt;&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;` </span><br><span class="line">// 视频</span><br><span class="line">`&lt;div data-del=&quot;video&quot; class=&quot;_editor_title _editor_video_title&quot;&gt;</span><br><span class="line">  &lt;span data-del=&quot;video&quot; class=&quot;_editor_title_btn&quot; data-ind=&quot;1551928713346&quot;&gt;添加封面图&lt;/span&gt;</span><br><span class="line">  &lt;span data-del=&quot;video&quot; class=&quot;_editor_close&quot;&gt;&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;`</span><br><span class="line">// 替换后：</span><br><span class="line">// 图片</span><br><span class="line">`&lt;!-- img del btn --&gt;`</span><br><span class="line">// 视频</span><br><span class="line">`&lt;!-- video del btn --&gt;`</span><br><span class="line"></span><br><span class="line">/////////////////////////////////////////////////////////////////////////</span><br><span class="line"></span><br><span class="line">// 保存：图注</span><br><span class="line">var reg = /&lt;div[^&gt;]*&gt;&lt;input\s+class\=\&quot;_editor_input\&quot;[^&gt;]+data\-value=\&quot;(.*?)\&quot;[^&gt;]+\/&gt;.+?&lt;\/span&gt;[^&lt;&gt;]*&lt;\/div&gt;/g;</span><br><span class="line">// 替换前：</span><br><span class="line">`&lt;div class=&quot;_editor_label&quot;&gt;</span><br><span class="line">  &lt;input class=&quot;_editor_input&quot;  value=&quot;&quot; data-value=&quot;abc&quot;  placeholder=&quot;请输入图注1-60个汉字&quot; autocomplete=&quot;off&quot;/&gt;</span><br><span class="line">  &lt;span class=&quot;_editor_stat&quot;&gt;3/60&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;`</span><br><span class="line">// 替换后：</span><br><span class="line">// input 如果有值：</span><br><span class="line">`&lt;!-- del input start --&gt;</span><br><span class="line">&lt;div class=&quot;_editor_label&quot;&gt;</span><br><span class="line">  &lt;span&gt;图注&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;!-- del input end --&gt;`</span><br><span class="line">// input 没有值：</span><br><span class="line">`&lt;!-- del input empty --&gt;`</span><br><span class="line"></span><br><span class="line">/////////////////////////////////////////////////////////////////////////</span><br><span class="line"></span><br><span class="line">// 编辑：视频图片占位图反显</span><br><span class="line">var reg = /&lt;video[^&gt;]+src=\&quot;([^&gt;]+?)\&quot;[^&gt;]*&gt;&lt;\/video&gt;/g;</span><br><span class="line">// 替换前：</span><br><span class="line">`&lt;video class=&quot;edui-upload-video video-js&quot; controls=&quot;&quot; preload=&quot;none&quot; width=&quot;0&quot; height=&quot;0&quot; src=&quot;gg&quot; data-setup=&quot;&#123;&#125;&quot;&gt;&lt;/video&gt;`</span><br><span class="line">// 替换后：</span><br><span class="line">`&lt;img class=&quot;edui-upload-video&quot; _url=&quot;gg&quot; src=&quot;./src/images/convertVideo.jpg&quot; alt=&quot;&quot;&gt;`</span><br><span class="line"></span><br><span class="line">/////////////////////////////////////////////////////////////////////////</span><br><span class="line"></span><br><span class="line">// 编辑：图注反显</span><br><span class="line">var reg = /&lt;\!\-\- del input start \-\-&gt;.*?&lt;span&gt;([^&lt;&gt;]*?)&lt;\/span&gt;.*?&lt;\!\-\- del input end \-\-&gt;|&lt;\!\-\- del input empty \-\-&gt;/g;</span><br><span class="line">// 替换前：</span><br><span class="line">// input 如果有值：</span><br><span class="line">`&lt;!-- del input start --&gt;</span><br><span class="line">&lt;div class=&quot;_editor_label&quot;&gt;</span><br><span class="line">  &lt;span&gt;图注&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;!-- del input end --&gt;`</span><br><span class="line">// input 没有值：</span><br><span class="line">`&lt;!-- del input empty --&gt;`</span><br><span class="line">// 替换后：</span><br><span class="line">`&lt;div class=&quot;_editor_label&quot;&gt;</span><br><span class="line">  &lt;input class=&quot;_editor_input&quot;  value=&quot;&quot; data-value=&quot;图注&quot;  placeholder=&quot;请输入图注1-60个汉字&quot; autocomplete=&quot;off&quot;/&gt;</span><br><span class="line">  &lt;span class=&quot;_editor_stat&quot;&gt;3/60&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;`</span><br><span class="line"></span><br><span class="line">/////////////////////////////////////////////////////////////////////////</span><br><span class="line"></span><br><span class="line">// 编辑：关闭按钮反显</span><br><span class="line">var reg = /&lt;!--.*?(img|video).*?del btn --&gt;/g</span><br><span class="line">// 替换前：</span><br><span class="line">// 图片</span><br><span class="line">`&lt;!-- img del btn --&gt;`</span><br><span class="line">// 视频</span><br><span class="line">`&lt;!-- video del btn --&gt;`</span><br><span class="line">// 替换后：</span><br><span class="line">// 图片：</span><br><span class="line">`&lt;div data-del=&quot;img&quot; class=&quot;_editor_title _editor_img_title&quot;&gt;</span><br><span class="line">  &lt;span data-del=&quot;img&quot; class=&quot;_editor_close&quot;&gt;&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;` </span><br><span class="line">// 视频</span><br><span class="line">`&lt;div data-del=&quot;video&quot; class=&quot;_editor_title _editor_video_title&quot;&gt;</span><br><span class="line">  &lt;span data-del=&quot;video&quot; class=&quot;_editor_title_btn&quot; data-ind=&quot;1551928713346&quot;&gt;添加封面图&lt;/span&gt;</span><br><span class="line">  &lt;span data-del=&quot;video&quot; class=&quot;_editor_close&quot;&gt;&lt;/span&gt;</span><br><span class="line">&lt;/div&gt;`</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/16/redux-login/" rel="next" title="react-redux开发登录校验">
+                <i class="fa fa-chevron-left"></i> react-redux开发登录校验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/28/hexoTheme/" rel="prev" title="HEXO主题修改">
+                HEXO主题修改 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <div class="site-description motion-element" itemprop="description">lulu</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
