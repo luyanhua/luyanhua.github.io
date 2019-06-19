@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Array.from()注意:不影响原数组Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。类数组对象举例:实际应用中，常见的类似数组的对象是 DOM 操作返回的 NodeList 集合，以及函数内部的arguments对象。Array.from都可以将它">
+<meta name="keywords" content="ES6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6数组的扩展">
+<meta property="og:url" content="http://yoursite.com/2019/06/12/arrayExtend/index.html">
+<meta property="og:site_name" content="露露的笔记">
+<meta property="og:description" content="Array.from()注意:不影响原数组Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。类数组对象举例:实际应用中，常见的类似数组的对象是 DOM 操作返回的 NodeList 集合，以及函数内部的arguments对象。Array.from都可以将它">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-13T09:54:17.325Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES6数组的扩展">
+<meta name="twitter:description" content="Array.from()注意:不影响原数组Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。类数组对象举例:实际应用中，常见的类似数组的对象是 DOM 操作返回的 NodeList 集合，以及函数内部的arguments对象。Array.from都可以将它">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/06/12/arrayExtend/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ES6数组的扩展 | 露露的笔记</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">露露的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/12/arrayExtend/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content>
+      <meta itemprop="description" content="lulu">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="露露的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ES6数组的扩展
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-12 16:41:53" itemprop="dateCreated datePublished" datetime="2019-06-12T16:41:53+08:00">2019-06-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-06-13 17:54:17" itemprop="dateModified" datetime="2019-06-13T17:54:17+08:00">2019-06-13</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ES6/" itemprop="url" rel="index"><span itemprop="name">ES6</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Array-from"><a href="#Array-from" class="headerlink" title="Array.from()"></a><strong>Array.from()</strong></h2><p>注意:不影响原数组<br>Array.from方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。<br>类数组对象举例:实际应用中，常见的类似数组的对象是 DOM 操作返回的 NodeList 集合，以及函数内部的arguments对象。Array.from都可以将它们转为真正的数组。<br>下面是一个类似数组的对象，Array.from将它转为真正的数组。 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> arrayLike = &#123;</span><br><span class="line">    <span class="string">'0'</span>: <span class="string">'a'</span>,</span><br><span class="line">    <span class="string">'1'</span>: <span class="string">'b'</span>,</span><br><span class="line">    <span class="string">'2'</span>: <span class="string">'c'</span>,</span><br><span class="line">    length: 3</span><br><span class="line">&#125;;</span><br><span class="line">// ES5的写法</span><br><span class="line">var arr1 = [].slice.call(arrayLike); // [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</span><br><span class="line">//如果前面的key不是索引的形式会转换成一个长度为3的，每一个元素值为undefined的数组</span><br><span class="line"></span><br><span class="line">// ES6的写法</span><br><span class="line"><span class="built_in">let</span> arr2 = Array.from(arrayLike); // [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</span><br></pre></td></tr></table></figure>
+
+<p>常见的类似数组的对象是 DOM 操作返回的 NodeList 集合，以及函数内部的arguments对象。Array.from都可以将它们转为真正的数组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;ul&gt;</span><br><span class="line">&lt;li&gt; go to store&lt;/li&gt;</span><br><span class="line">&lt;li&gt;watching tv&lt;/li&gt;</span><br><span class="line">&lt;li&gt;gon home&lt;/li&gt;</span><br><span class="line">&lt;/ul&gt;</span><br><span class="line">//js代码如下：</span><br><span class="line">const todos =document.querrySelectorAll(<span class="string">'li'</span>);</span><br><span class="line">consloe.log(todos );//todos是一个类数组对象，他的_proto_是NodeList,所以我们下面代码直接调用map会报错</span><br><span class="line">const names=todos .map(todo=&gt;todo.textContent);</span><br></pre></td></tr></table></figure>
+
+<p>正确的写法是先把类数组对象转换成数组对象才能调用map方法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const names=Array.from(todos) .map(todo=&gt;todo.textContent)；</span><br></pre></td></tr></table></figure>
+
+<p>Array.from还可以传入第二个参数是一个函数，相当于数组的map方法所以上面的代码可以直接写成：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const names=Array.from(todos，todo=&gt;todo.textContent)；</span><br></pre></td></tr></table></figure>
+
+<p>接下来看下argumens对象的转换</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">sum</span></span>()&#123;</span><br><span class="line"><span class="built_in">return</span> Array.from( arguments).reduce((prev,curr)=&gt;prev+curr,0)</span><br><span class="line">&#125;</span><br><span class="line">sum(1,2,3,4,5);</span><br></pre></td></tr></table></figure>
+
+<p>只要是部署了 Iterator 接口的数据结构，Array.from都能将其转为数组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Array.from(<span class="string">'hello'</span>)</span><br><span class="line">// [<span class="string">'h'</span>, <span class="string">'e'</span>, <span class="string">'l'</span>, <span class="string">'l'</span>, <span class="string">'o'</span>]</span><br></pre></td></tr></table></figure>
+
+<p>Set 结构都具有 Iterator 接口，因此可以被Array.from转为真正的数组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> namesSet = new Set([<span class="string">'a'</span>, <span class="string">'b'</span>])</span><br><span class="line">Array.from(namesSet) // [<span class="string">'a'</span>, <span class="string">'b'</span>]</span><br></pre></td></tr></table></figure>
+
+<p>如果参数是一个真正的数组，Array.from会返回一个一模一样的新数组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Array.from([1, 2, 3])</span><br><span class="line">// [1, 2, 3]</span><br></pre></td></tr></table></figure>
+
+<p>不会影响原数组<br>扩展运算符（…）也可以将某些数据结构转为数组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// arguments对象</span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">foo</span></span>() &#123;</span><br><span class="line">  const args = [...arguments];</span><br><span class="line">&#125;</span><br><span class="line">// NodeList对象</span><br><span class="line">[...document.querySelectorAll(<span class="string">'div'</span>)]</span><br></pre></td></tr></table></figure>
+
+<p>扩展运算符背后调用的是遍历器接口（Symbol.iterator），如果一个对象没有部署这个接口，就无法转换。Array.from方法还支持类似数组的对象。所谓类似数组的对象，本质特征只有一点，即必须有length属性。因此，任何有length属性的对象，都可以通过Array.from方法转为数组，而此时扩展运算符就无法转换。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Array.from(&#123; length: 3 &#125;);</span><br><span class="line">// [ undefined, undefined, undefined ]</span><br></pre></td></tr></table></figure>
+
+<h2 id="Array-of"><a href="#Array-of" class="headerlink" title="Array.of()"></a><strong>Array.of()</strong></h2><p>注意:如果是一个数组使用了这个方法不影响原数组<br>Array.of方法用于将一组值，转换为数组<br>Array.of方法主要解决数组声明不一致的问题<br>之前我们在声明一个数组的时候可以使用下面的方法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var arrays = new Array(10);</span><br><span class="line">//数组长度是10</span><br></pre></td></tr></table></figure>
+
+<p>当传入多个参数的时候：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var array2 = new Array(1,2,3,4,5);</span><br><span class="line">array2</span><br><span class="line">//[1,2,3,4,5]</span><br></pre></td></tr></table></figure>
+
+<p>可以看出来参数不同声明出来的数组也不同，Array.of解决了上面的问题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Array.of(10);</span><br><span class="line">//[10]</span><br><span class="line">Array.of(10,20,30);</span><br><span class="line">//[10,20,30]</span><br></pre></td></tr></table></figure>
+
+<p>Array.of总是返回参数值组成的数组。如果没有参数，就返回一个空数组。<br>Array.of方法可以用下面的代码模拟实现。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">ArrayOf</span></span>()&#123;</span><br><span class="line">  <span class="built_in">return</span> [].slice.call(arguments);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数组实例的-copyWithin"><a href="#数组实例的-copyWithin" class="headerlink" title="数组实例的 copyWithin()"></a><strong>数组实例的 copyWithin()</strong></h2><p>注意：改变当前数组<br>数组实例的copyWithin()方法，在当前数组内部，将指定位置的成员复制到其他位置（会覆盖原有成员），然后返回当前数组。也就是说，使用这个方法，会修改当前数组<br>它接受三个参数。</p>
+<p>target（必需）：从该位置开始替换数据。如果为负值，表示倒数。<br>start（可选）：从该位置开始读取数据，默认为 0。如果为负值，表示从末尾开始计算。<br>end（可选）：到该位置前停止读取数据，默认等于数组长度。如果为负值，表示从末尾开始计算。<br>这三个参数都应该是数值，如果不是，会自动转为数值。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">// 将3号位复制到0号位</span><br><span class="line">[1, 2, 3, 4, 5].copyWithin(0, 3, 4)</span><br><span class="line">// [4, 2, 3, 4, 5]</span><br><span class="line"></span><br><span class="line">// -2相当于3号位，-1相当于4号位</span><br><span class="line">[1, 2, 3, 4, 5].copyWithin(0, -2, -1)</span><br><span class="line">// [4, 2, 3, 4, 5]</span><br><span class="line"></span><br><span class="line">// 将2号位到数组结束，复制到0号位</span><br><span class="line"><span class="built_in">let</span> i32a = new Int32Array([1, 2, 3, 4, 5]);</span><br><span class="line">i32a.copyWithin(0, 2);</span><br><span class="line">// Int32Array [3, 4, 5, 4, 5]</span><br><span class="line"></span><br><span class="line">// 将3号位复制到0号位</span><br><span class="line">[].copyWithin.call(&#123;length: 5, 3: 1&#125;, 0, 3)</span><br><span class="line">// &#123;0: 1, 3: 1, length: 5&#125;</span><br><span class="line"></span><br><span class="line">// 对于没有部署 TypedArray 的 copyWithin 方法的平台</span><br><span class="line">// 需要采用下面的写法</span><br><span class="line">[].copyWithin.call(new Int32Array([1, 2, 3, 4, 5]), 0, 3, 4);</span><br><span class="line">// Int32Array [4, 2, 3, 4, 5]</span><br></pre></td></tr></table></figure>
+
+<h2 id="数组实例的-find-和-findIndex"><a href="#数组实例的-find-和-findIndex" class="headerlink" title="数组实例的 find() 和 findIndex()"></a><strong>数组实例的 find() 和 findIndex()</strong></h2><p>注意：不影响原数组<br>数组实例的find方法，用于找出第一个符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为true的成员，然后返回该成员。如果没有符合条件的成员，则返回undefined。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1, 4, -5, 10].find((n) =&gt; n &lt; 0)</span><br><span class="line">// -5</span><br></pre></td></tr></table></figure>
+
+<p>上面代码找出数组中第一个小于 0 的成员。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[1, 5, 10, 15].find(<span class="keyword">function</span>(value, index, arr) &#123;</span><br><span class="line">  <span class="built_in">return</span> value &gt; 9;</span><br><span class="line">&#125;) // 10</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，find方法的回调函数可以接受三个参数，依次为当前的值、当前的位置和原数组。还是找到的是第一个。<br>数组实例的findIndex方法的用法与find方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回-1。<br>findIndex与indexOf方法一样返回的是索引，找不到发返回-1</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[1, 5, 10, 15].findIndex(<span class="keyword">function</span>(value, index, arr) &#123;</span><br><span class="line">  <span class="built_in">return</span> value &gt; 9;</span><br><span class="line">&#125;) // 2</span><br></pre></td></tr></table></figure>
+
+<p>这两个方法都可以接受第二个参数，用来绑定回调函数的this对象。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> f(v)&#123;</span><br><span class="line">  <span class="built_in">return</span> v &gt; this.age;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">let</span> person = &#123;name: <span class="string">'John'</span>, age: 20&#125;;</span><br><span class="line">[10, 12, 26, 15].find(f, person);    // 26</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码中，find函数接收了第二个参数person对象，回调函数中的this对象指向person对象。<br>这两个方法都可以发现NaN，弥补了数组的indexOf方法的不足。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[NaN].indexOf(NaN)</span><br><span class="line">// -1</span><br><span class="line">[NaN].findIndex(y =&gt; Object.is(NaN, y))</span><br><span class="line">// 0</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，indexOf方法无法识别数组的NaN成员，但是findIndex方法可以借助Object.is方法做到。</p>
+<h2 id="数组实例的-fill"><a href="#数组实例的-fill" class="headerlink" title="数组实例的 fill()"></a><strong>数组实例的 fill()</strong></h2><p>注意：改变原数组<br>fill方法使用给定值，填充一个数组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>].fill(7)</span><br><span class="line">// [7, 7, 7]</span><br><span class="line">new Array(3).fill(7)</span><br><span class="line">// [7, 7, 7]</span><br></pre></td></tr></table></figure>
+
+<p>fill方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>].fill(7, 1, 2)</span><br><span class="line">// [<span class="string">'a'</span>, 7, <span class="string">'c'</span>]</span><br></pre></td></tr></table></figure>
+
+<p>fill方法从 1 号位开始，向原数组填充 7，到 2 号位之前结束<br>如果填充的类型为对象，那么被赋值的是同一个内存地址的对象，而不是深拷贝对象。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> arr = new Array(3).fill(&#123;name: <span class="string">"Mike"</span>&#125;);</span><br><span class="line">arr[0].name = <span class="string">"Ben"</span>;</span><br><span class="line">arr</span><br><span class="line">// [&#123;name: <span class="string">"Ben"</span>&#125;, &#123;name: <span class="string">"Ben"</span>&#125;, &#123;name: <span class="string">"Ben"</span>&#125;]</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> arr = new Array(3).fill([]);</span><br><span class="line">arr[0].push(5);</span><br><span class="line">arr</span><br><span class="line">// [[5], [5], [5]]</span><br></pre></td></tr></table></figure>
+
+<h2 id="数组实例的-entries-keys-和-values"><a href="#数组实例的-entries-keys-和-values" class="headerlink" title="数组实例的 entries() keys() 和 values()"></a><strong>数组实例的 entries() keys() 和 values()</strong></h2><p>ES6 提供三个新的方法——entries()，keys()和values()——用于遍历数组。它们都返回一个遍历器对象，可以用for…of循环进行遍历，唯一的区别是keys()是对键名的遍历、values()是对键值的遍历，entries()是对键值对的遍历。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> index of [<span class="string">'a'</span>, <span class="string">'b'</span>].keys()) &#123;</span><br><span class="line">  console.log(index);</span><br><span class="line">&#125;</span><br><span class="line">// 0</span><br><span class="line">// 1</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> elem of [<span class="string">'a'</span>, <span class="string">'b'</span>].values()) &#123;</span><br><span class="line">  console.log(elem);</span><br><span class="line">&#125;</span><br><span class="line">// <span class="string">'a'</span></span><br><span class="line">// <span class="string">'b'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> [index, elem] of [<span class="string">'a'</span>, <span class="string">'b'</span>].entries()) &#123;</span><br><span class="line">  console.log(index, elem);</span><br><span class="line">&#125;</span><br><span class="line">// 0 <span class="string">"a"</span></span><br><span class="line">// 1 <span class="string">"b"</span></span><br></pre></td></tr></table></figure>
+
+<p>如果不使用for…of循环，可以手动调用遍历器对象的next方法，进行遍历</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> letter = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>];</span><br><span class="line"><span class="built_in">let</span> entries = letter.entries();</span><br><span class="line">console.log(entries.next().value); // [0, <span class="string">'a'</span>]</span><br><span class="line">console.log(entries.next().value); // [1, <span class="string">'b'</span>]</span><br><span class="line">console.log(entries.next().value); // [2, <span class="string">'c'</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="数组实例的-includes"><a href="#数组实例的-includes" class="headerlink" title="数组实例的 includes()"></a><strong>数组实例的 includes()</strong></h2><p>返回true或false<br>Array.prototype.includes方法返回一个布尔值，表示某个数组是否包含给定的值，与字符串的includes方法类似。ES2016 引入了该方法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[1, 2, 3].includes(2)     // <span class="literal">true</span></span><br><span class="line">[1, 2, 3].includes(4)     // <span class="literal">false</span></span><br><span class="line">[1, 2, NaN].includes(NaN) // <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>该方法的第二个参数表示搜索的起始位置，默认为0。如果第二个参数为负数，则表示倒数的位置，如果这时它大于数组长度（比如第二个参数为-4，但数组长度为3），则会重置为从0开始。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1, 2, 3].includes(3, 3);  // <span class="literal">false</span></span><br><span class="line">[1, 2, 3].includes(3, -1); // <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>没有该方法之前，我们通常使用数组的indexOf方法，检查是否包含某个值。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> arr =[<span class="string">"aaaaa"</span>,1,2]</span><br><span class="line"><span class="keyword">if</span> (arr.indexOf(<span class="string">"aaa"</span>) !== -1) &#123;</span><br><span class="line">  console.log(<span class="string">"aa"</span>)</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line"></span><br><span class="line">console.log(<span class="string">"ccc"</span>)</span><br><span class="line">&#125;</span><br><span class="line">//ccc</span><br></pre></td></tr></table></figure>
+
+<p>indexOf方法有两个缺点，一是不够语义化，它的含义是找到参数值的第一个出现位置，所以要去比较是否不等于-1，表达起来不够直观。二是，它内部使用严格相等运算符（===）进行判断，这会导致对NaN的误判。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[NaN].indexOf(NaN)</span><br><span class="line">// -1</span><br></pre></td></tr></table></figure>
+
+<p>includes使用的是不一样的判断算法，就没有这个问题。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[NaN].includes(NaN)</span><br><span class="line">// <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="数组实例的-flat-，flatMap"><a href="#数组实例的-flat-，flatMap" class="headerlink" title="数组实例的 flat()，flatMap()"></a><strong>数组实例的 flat()，flatMap()</strong></h2><p>不改变原数组，返回新数组<br>数组的成员有时还是数组，Array.prototype.flat()用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1, 2, [3, 4]].flat()</span><br><span class="line">// [1, 2, 3, 4]</span><br></pre></td></tr></table></figure>
+
+<p>flat()默认只会“拉平”一层，如果想要“拉平”多层的嵌套数组，可以将flat()方法的参数写成一个整数，表示想要拉平的层数，默认为1。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[1, 2, [3, [4, 5]]].flat()</span><br><span class="line">// [1, 2, 3, [4, 5]]</span><br><span class="line"></span><br><span class="line">[1, 2, [3, [4, 5]]].flat(2)</span><br><span class="line">// [1, 2, 3, 4, 5]</span><br></pre></td></tr></table></figure>
+
+<p>如果不管有多少层嵌套，都要转成一维数组，可以用Infinity关键字作为参数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1, [2, [3]]].flat(Infinity)</span><br><span class="line">// [1, 2, 3]</span><br></pre></td></tr></table></figure>
+
+<p>如果原数组有空位，flat()方法会跳过空位</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[1, 2, , 4, 5].flat()</span><br><span class="line">// [1, 2, 4, 5]</span><br></pre></td></tr></table></figure>
+
+<p>flatMap()方法对原数组的每个成员执行一个函数（相当于执行Array.prototype.map()），然后对返回值组成的数组执行flat()方法。该方法返回一个新数组，不改变原数组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 相当于 [[2, 4], [3, 6], [4, 8]].flat()</span><br><span class="line">[2, 3, 4].flatMap((x) =&gt; [x, x * 2])</span><br><span class="line">// [2, 4, 3, 6, 4, 8]</span><br></pre></td></tr></table></figure>
+
+<p>flatMap()只能展开一层数组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 相当于 [[[2]], [[4]], [[6]], [[8]]].flat()</span><br><span class="line">[1, 2, 3, 4].flatMap(x =&gt; [[x * 2]])</span><br><span class="line">// [[2], [4], [6], [8]]</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，遍历函数返回的是一个双层的数组，但是默认只能展开一层，因此flatMap()返回的还是一个嵌套数组。<br>flatMap()方法的参数是一个遍历函数，该函数可以接受三个参数，分别是当前数组成员、当前数组成员的位置（从零开始）、原数组。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr.flatMap(<span class="keyword">function</span> callback(currentValue[, index[, array]]) &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;[, thisArg])</span><br></pre></td></tr></table></figure>
+
+<p>flatMap()方法还可以有第二个参数，用来绑定遍历函数里面的this。</p>
+<h2 id="数组的空位"><a href="#数组的空位" class="headerlink" title="数组的空位"></a><strong>数组的空位</strong></h2><p>数组的空位指，数组的某一个位置没有任何值。比如，Array构造函数返回的数组都是空位。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Array(3) // [, , ,]</span><br></pre></td></tr></table></figure>
+
+<p>注意，空位不是undefined，一个位置的值等于undefined，依然是有值的。空位是没有任何值，in运算符可以说明这一点。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0 <span class="keyword">in</span> [undefined, undefined, undefined] // <span class="literal">true</span></span><br><span class="line">0 <span class="keyword">in</span> [, , ,] // <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码说明，第一个数组的 0 号位置是有值的，第二个数组的 0 号位置没有值<br>ES5 对空位的处理，已经很不一致了，大多数情况下会忽略空位。</p>
+<p>forEach(), filter(), reduce(), every() 和some()都会跳过空位。<br>map()会跳过空位，但会保留这个值<br>join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">// forEach方法</span><br><span class="line">[,<span class="string">'a'</span>].forEach((x,i) =&gt; console.log(i)); // 1</span><br><span class="line"></span><br><span class="line">// filter方法</span><br><span class="line">[<span class="string">'a'</span>,,<span class="string">'b'</span>].filter(x =&gt; <span class="literal">true</span>) // [<span class="string">'a'</span>,<span class="string">'b'</span>]</span><br><span class="line"></span><br><span class="line">// every方法</span><br><span class="line">[,<span class="string">'a'</span>].every(x =&gt; x===<span class="string">'a'</span>) // <span class="literal">true</span></span><br><span class="line"></span><br><span class="line">// reduce方法</span><br><span class="line">[1,,2].reduce((x,y) =&gt; x+y) // 3</span><br><span class="line"></span><br><span class="line">// some方法</span><br><span class="line">[,<span class="string">'a'</span>].some(x =&gt; x !== <span class="string">'a'</span>) // <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">// map方法</span><br><span class="line">[,<span class="string">'a'</span>].map(x =&gt; 1) // [,1]</span><br><span class="line"></span><br><span class="line">// join方法</span><br><span class="line">[,<span class="string">'a'</span>,undefined,null].join(<span class="string">'#'</span>) // <span class="string">"#a##"</span></span><br><span class="line"></span><br><span class="line">// toString方法</span><br><span class="line">[,<span class="string">'a'</span>,undefined,null].toString() // <span class="string">",a,,"</span></span><br></pre></td></tr></table></figure>
+
+<p>ES6 则是明确将空位转为undefined。<br>Array.from方法会将数组的空位，转为undefined，也就是说，这个方法不会忽略空位。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Array.from([<span class="string">'a'</span>,,<span class="string">'b'</span>])</span><br><span class="line">// [ <span class="string">"a"</span>, undefined, <span class="string">"b"</span> ]</span><br></pre></td></tr></table></figure>
+
+<p>扩展运算符（…）也会将空位转为undefined</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[...[<span class="string">'a'</span>,,<span class="string">'b'</span>]]</span><br><span class="line">// [ <span class="string">"a"</span>, undefined, <span class="string">"b"</span> ]</span><br></pre></td></tr></table></figure>
+
+<p>copyWithin()会连空位一起拷贝。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[,<span class="string">'a'</span>,<span class="string">'b'</span>,,].copyWithin(2,0) // [,<span class="string">"a"</span>,,<span class="string">"a"</span>]</span><br></pre></td></tr></table></figure>
+
+<p>fill()会将空位视为正常的数组位置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new Array(3).fill(<span class="string">'a'</span>) // [<span class="string">"a"</span>,<span class="string">"a"</span>,<span class="string">"a"</span>]</span><br></pre></td></tr></table></figure>
+
+<p>for…of循环也会遍历空位。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> arr = [, ,];</span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i of arr) &#123;</span><br><span class="line">  console.log(1);</span><br><span class="line">&#125;</span><br><span class="line">// 1</span><br><span class="line">// 1打印两次1</span><br></pre></td></tr></table></figure>
+
+<p>由于空位的处理规则非常不统一，所以建议避免出现空位。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ES6/" rel="tag"># ES6</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/12/photo/" rel="next" title="photo">
+                <i class="fa fa-chevron-left"></i> photo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/12/extendFlag/" rel="prev" title="ES6扩展运算符">
+                ES6扩展运算符 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <div class="site-description motion-element" itemprop="description">lulu</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-from"><span class="nav-number">1.</span> <span class="nav-text">Array.from()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-of"><span class="nav-number">2.</span> <span class="nav-text">Array.of()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组实例的-copyWithin"><span class="nav-number">3.</span> <span class="nav-text">数组实例的 copyWithin()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组实例的-find-和-findIndex"><span class="nav-number">4.</span> <span class="nav-text">数组实例的 find() 和 findIndex()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组实例的-fill"><span class="nav-number">5.</span> <span class="nav-text">数组实例的 fill()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组实例的-entries-keys-和-values"><span class="nav-number">6.</span> <span class="nav-text">数组实例的 entries() keys() 和 values()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组实例的-includes"><span class="nav-number">7.</span> <span class="nav-text">数组实例的 includes()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组实例的-flat-，flatMap"><span class="nav-number">8.</span> <span class="nav-text">数组实例的 flat()，flatMap()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组的空位"><span class="nav-number">9.</span> <span class="nav-text">数组的空位</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

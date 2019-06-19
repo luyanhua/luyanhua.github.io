@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="字符的 Unicode 表示法：ES6 加强了对 Unicode 的支持，允许采用\uxxxx形式表示一个字符，其中xxxx表示字符的 Unicode 码点。 12&quot;\u0061&quot;// &quot;a&quot;  但是，这种表示法只限于码点在\u0000~\uFFFF之间的字符。超出这个范围的字符，必须用两个双字节的形式表示。 1234&quot;\uD842\uDFB7&quot;// &quot;𠮷&quot;&quot;\u20BB7&quot;// &quot; 7&quot;  上">
+<meta name="keywords" content="ES6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6字符串的扩展">
+<meta property="og:url" content="http://yoursite.com/2019/06/13/stringExtend/index.html">
+<meta property="og:site_name" content="露露的笔记">
+<meta property="og:description" content="字符的 Unicode 表示法：ES6 加强了对 Unicode 的支持，允许采用\uxxxx形式表示一个字符，其中xxxx表示字符的 Unicode 码点。 12&quot;\u0061&quot;// &quot;a&quot;  但是，这种表示法只限于码点在\u0000~\uFFFF之间的字符。超出这个范围的字符，必须用两个双字节的形式表示。 1234&quot;\uD842\uDFB7&quot;// &quot;𠮷&quot;&quot;\u20BB7&quot;// &quot; 7&quot;  上">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-13T02:45:22.829Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES6字符串的扩展">
+<meta name="twitter:description" content="字符的 Unicode 表示法：ES6 加强了对 Unicode 的支持，允许采用\uxxxx形式表示一个字符，其中xxxx表示字符的 Unicode 码点。 12&quot;\u0061&quot;// &quot;a&quot;  但是，这种表示法只限于码点在\u0000~\uFFFF之间的字符。超出这个范围的字符，必须用两个双字节的形式表示。 1234&quot;\uD842\uDFB7&quot;// &quot;𠮷&quot;&quot;\u20BB7&quot;// &quot; 7&quot;  上">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/06/13/stringExtend/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ES6字符串的扩展 | 露露的笔记</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">露露的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/13/stringExtend/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content>
+      <meta itemprop="description" content="lulu">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="露露的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ES6字符串的扩展
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-13 09:40:35 / 修改时间：10:45:22" itemprop="dateCreated datePublished" datetime="2019-06-13T09:40:35+08:00">2019-06-13</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ES6/" itemprop="url" rel="index"><span itemprop="name">ES6</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="字符的-Unicode-表示法："><a href="#字符的-Unicode-表示法：" class="headerlink" title="字符的 Unicode 表示法："></a><strong>字符的 Unicode 表示法：</strong></h2><p>ES6 加强了对 Unicode 的支持，允许采用\uxxxx形式表示一个字符，其中xxxx表示字符的 Unicode 码点。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"\u0061"</span></span><br><span class="line">// <span class="string">"a"</span></span><br></pre></td></tr></table></figure>
+
+<p>但是，这种表示法只限于码点在\u0000~\uFFFF之间的字符。超出这个范围的字符，必须用两个双字节的形式表示。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"\uD842\uDFB7"</span></span><br><span class="line">// <span class="string">"𠮷"</span></span><br><span class="line"><span class="string">"\u20BB7"</span></span><br><span class="line">// <span class="string">" 7"</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码表示，如果直接在\u后面跟上超过0xFFFF的数值（比如\u20BB7），JavaScript 会理解成\u20BB+7。由于\u20BB是一个不可打印字符，所以只会显示一个空格，后面跟着一个7<br>ES6 对这一点做出了改进，只要将码点放入大括号，就能正确解读该字符。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"\u&#123;20BB7&#125;"</span></span><br><span class="line">// <span class="string">"𠮷"</span></span><br><span class="line"></span><br><span class="line"><span class="string">"\u&#123;41&#125;\u&#123;42&#125;\u&#123;43&#125;"</span></span><br><span class="line">// <span class="string">"ABC"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> hello = 123;</span><br><span class="line">hell\u&#123;6F&#125; // 123</span><br><span class="line"></span><br><span class="line"><span class="string">'\u&#123;1F680&#125;'</span> === <span class="string">'\uD83D\uDE80'</span></span><br><span class="line">// <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，最后一个例子表明，大括号表示法与四字节的 UTF-16 编码是等价的。<br>有了这种表示法之后，JavaScript 共有 6 种方法可以表示一个字符。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'\z'</span> === <span class="string">'z'</span>  // <span class="literal">true</span></span><br><span class="line"><span class="string">'\172'</span> === <span class="string">'z'</span> // <span class="literal">true</span></span><br><span class="line"><span class="string">'\x7A'</span> === <span class="string">'z'</span> // <span class="literal">true</span></span><br><span class="line"><span class="string">'\u007A'</span> === <span class="string">'z'</span> // <span class="literal">true</span></span><br><span class="line"><span class="string">'\u&#123;7A&#125;'</span> === <span class="string">'z'</span> // <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="字符串的遍历器接口"><a href="#字符串的遍历器接口" class="headerlink" title="字符串的遍历器接口"></a><strong>字符串的遍历器接口</strong></h2><p>ES6 为字符串添加了遍历器接口（详见《Iterator》一章），使得字符串可以被for…of循环遍历。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> codePoint of <span class="string">'foo'</span>) &#123;</span><br><span class="line">  console.log(codePoint)</span><br><span class="line">&#125;</span><br><span class="line">// <span class="string">"f"</span></span><br><span class="line">// <span class="string">"o"</span></span><br><span class="line">// <span class="string">"o"</span></span><br></pre></td></tr></table></figure>
+
+<p>除了遍历字符串，这个遍历器最大的优点是可以识别大于0xFFFF的码点，传统的for循环无法识别这样的码点。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> text = String.fromCodePoint(0x20BB7);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i = 0; i &lt; text.length; i++) &#123;</span><br><span class="line">  console.log(text[i]);</span><br><span class="line">&#125;</span><br><span class="line">// <span class="string">" "</span></span><br><span class="line">// <span class="string">" "</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">let</span> i of text) &#123;</span><br><span class="line">  console.log(i);</span><br><span class="line">&#125;</span><br><span class="line">// <span class="string">"𠮷"</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，字符串text只有一个字符，但是for循环会认为它包含两个字符（都不可打印），而for…of循环会正确识别出这一个字符</p>
+<h2 id="字JSON-stringify-的改造"><a href="#字JSON-stringify-的改造" class="headerlink" title="字JSON.stringify() 的改造"></a><strong>字JSON.stringify() 的改造</strong></h2><p>根据标准，JSON 数据必须是 UTF-8 编码。但是，现在的JSON.stringify()方法有可能返回不符合 UTF-8 标准的字符串。<br>具体来说，UTF-8 标准规定，0xD800到0xDFFF之间的码点，不能单独使用，必须配对使用。比如，\uD834\uDF06是两个码点，但是必须放在一起配对使用，代表字符𝌆。这是为了表示码点大于0xFFFF的字符的一种变通方法。单独使用\uD834和\uDFO6这两个码点是不合法的，或者颠倒顺序也不行，因为\uDF06\uD834并没有对应的字符。<br>JSON.stringify()的问题在于，它可能返回0xD800到0xDFFF之间的单个码点。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">JSON.stringify(<span class="string">'\u&#123;D834&#125;'</span>) // <span class="string">"\u&#123;D834&#125;"</span></span><br></pre></td></tr></table></figure>
+
+<p>为了确保返回的是合法的 UTF-8 字符，ES2019 改变了JSON.stringify()的行为。如果遇到0xD800到0xDFFF之间的单个码点，或者不存在的配对形式，它会返回转义字符串，留给应用自己决定下一步的处理。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">JSON.stringify(<span class="string">'\u&#123;D834&#125;'</span>) // <span class="string">""</span>\\uD834<span class="string">""</span></span><br><span class="line">JSON.stringify(<span class="string">'\uDF06\uD834'</span>) // <span class="string">""</span>\\udf06\\ud834<span class="string">""</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="模板字符串"><a href="#模板字符串" class="headerlink" title="模板字符串"></a><strong>模板字符串</strong></h2><p>传统的 JavaScript 语言，输出模板通常是这样写的（下面使用了 jQuery 的方法）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'#result'</span>).append(</span><br><span class="line">  <span class="string">'There are &lt;b&gt;'</span> + basket.count + <span class="string">'&lt;/b&gt; '</span> +</span><br><span class="line">  <span class="string">'items in your basket, '</span> +</span><br><span class="line">  <span class="string">'&lt;em&gt;'</span> + basket.onSale +</span><br><span class="line">  <span class="string">'&lt;/em&gt; are on sale!'</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>这种形式非常的麻烦容易乱，ES6提供了模板字符串使字符串的拼接以及模板的编写变得特别简单,组合字符串的时候不在需要加号单引号这些，直接使用一对反引号即可，而且字符串中需要变量的时候直接${变量名}的这种方式，大括号里面可以是任何的js表达式，变量，对象的属性，还可以是一个函数，模板字符串还可以进行嵌套。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const person=<span class="string">'lili'</span>;</span><br><span class="line">const age=5;</span><br><span class="line">const sentence=`<span class="variable">$&#123;person&#125;</span> is <span class="variable">$&#123;age*2&#125;</span> years old`</span><br><span class="line">console.log(sentence);</span><br><span class="line">//lili is 10 years old</span><br></pre></td></tr></table></figure>
+
+<p>定义多行字符串</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 多行字符串</span><br><span class="line">`In JavaScript this is</span><br><span class="line"> not legal.`</span><br><span class="line"> //<span class="string">"In JavaScript this is</span></span><br><span class="line"><span class="string"> not legal."</span></span><br></pre></td></tr></table></figure>
+
+<p>如果在模板字符串中需要使用反引号，则前面要用反斜杠转义。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> greeting = `\`Yo\` World!`;</span><br><span class="line">//<span class="string">"`Yo` World!"</span></span><br></pre></td></tr></table></figure>
+
+<p>模板字符串之中还能调用函数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">fn</span></span>() &#123;</span><br><span class="line">  <span class="built_in">return</span> <span class="string">"Hello World"</span>;</span><br><span class="line">&#125;</span><br><span class="line">`foo <span class="variable">$&#123;fn()&#125;</span> bar`</span><br><span class="line">// foo Hello World bar</span><br></pre></td></tr></table></figure>
+
+<p>如果模板字符串中的变量没有声明，将报错</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 变量place没有声明</span><br><span class="line"><span class="built_in">let</span> msg = `Hello, <span class="variable">$&#123;place&#125;</span>`;</span><br><span class="line">// 报错</span><br></pre></td></tr></table></figure>
+
+<p>由于模板字符串的大括号内部，就是执行 JavaScript 代码，因此如果大括号内部是一个字符串，将会原样输出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">`Hello <span class="variable">$&#123;'World'&#125;</span>`</span><br><span class="line">// <span class="string">"Hello World"</span></span><br></pre></td></tr></table></figure>
+
+<p>模板字符串嵌套例子：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">const join=&#123;</span><br><span class="line">name:<span class="string">'join'</span>,</span><br><span class="line">todolist:[</span><br><span class="line">&#123;<span class="keyword">do</span>:<span class="string">'go to store'</span>,complete:<span class="literal">false</span>&#125;,</span><br><span class="line">&#123;<span class="keyword">do</span>:<span class="string">'watching TV'</span>,complete:<span class="literal">true</span>&#125;,</span><br><span class="line">&#123;<span class="keyword">do</span>:<span class="string">'go home'</span>,complete:<span class="literal">true</span>&#125;</span><br><span class="line">]</span><br><span class="line">&#125;</span><br><span class="line">const template=`&lt;ul&gt;<span class="variable">$&#123;join.todolist.map(todo=&gt;`&lt;li&gt;$&#123;todo.do&#125;</span> <span class="variable">$&#123;todo.complete ? '√'：'×'&#125;</span>&lt;/li&gt;`).join(<span class="string">''</span>)&#125;&lt;/ul&gt;`</span><br><span class="line">document.body.innerHTML=template;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>标签模板字符串，主要用于处理模板字符串，返回我们想要的字符串。下面的写法可以变量的部分添加高亮。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;style&gt;</span><br><span class="line">.hightLight&#123;</span><br><span class="line">color:red;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">function</span> highLight(strings,...values)&#123;</span><br><span class="line">const hightLighted = values.map(value=&gt;`&lt;span class=<span class="string">"hightLight"</span>&gt;<span class="variable">$&#123;value&#125;</span>&lt;/span&gt;`);</span><br><span class="line"><span class="built_in">let</span> str=<span class="string">''</span>;</span><br><span class="line">strings.forEach((string,i)=&gt;str+=`<span class="variable">$&#123;string&#125;</span><span class="variable">$&#123;hightLighted[i] || ''&#125;</span>`);</span><br><span class="line"><span class="built_in">return</span> str;</span><br><span class="line">&#125;;</span><br><span class="line">const user=<span class="string">'Mary'</span>;</span><br><span class="line">const topic=<span class="string">'Learn to use markdown'</span>;</span><br><span class="line">const sencence=highLight`<span class="variable">$&#123;user&#125;</span> has commented on your topic <span class="variable">$&#123;topic&#125;</span>`</span><br><span class="line">document.body.innerHTML=sencence;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>注意标签模板字符串还可以预防xss攻击，对用户输入内容做净化，使用DOMPurify</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ES6/" rel="tag"># ES6</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/12/extendFlag/" rel="next" title="ES6扩展运算符">
+                <i class="fa fa-chevron-left"></i> ES6扩展运算符
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/13/stringAdd/" rel="prev" title="ES6字符串新增方法">
+                ES6字符串新增方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <div class="site-description motion-element" itemprop="description">lulu</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字符的-Unicode-表示法："><span class="nav-number">1.</span> <span class="nav-text">字符的 Unicode 表示法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串的遍历器接口"><span class="nav-number">2.</span> <span class="nav-text">字符串的遍历器接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字JSON-stringify-的改造"><span class="nav-number">3.</span> <span class="nav-text">字JSON.stringify() 的改造</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板字符串"><span class="nav-number">4.</span> <span class="nav-text">模板字符串</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

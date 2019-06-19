@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.1">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.1.1',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="对象的扩展对象（object）是 JavaScript 最重要的数据结构。ES6 对它进行了重大升级，本章介绍数据结构本身的改变。属性的简洁表示法  12345const foo = &apos;bar&apos;;const baz = &amp;#123;foo&amp;#125;;baz // &amp;#123;foo: &quot;bar&quot;&amp;#125;// 等同于const baz = &amp;#123;foo: foo&amp;#125;;  上面代码">
+<meta name="keywords" content="ES6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES6对象的扩展">
+<meta property="og:url" content="http://yoursite.com/2019/06/14/objectExtend/index.html">
+<meta property="og:site_name" content="露露的笔记">
+<meta property="og:description" content="对象的扩展对象（object）是 JavaScript 最重要的数据结构。ES6 对它进行了重大升级，本章介绍数据结构本身的改变。属性的简洁表示法  12345const foo = &apos;bar&apos;;const baz = &amp;#123;foo&amp;#125;;baz // &amp;#123;foo: &quot;bar&quot;&amp;#125;// 等同于const baz = &amp;#123;foo: foo&amp;#125;;  上面代码">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-06-14T09:45:20.736Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ES6对象的扩展">
+<meta name="twitter:description" content="对象的扩展对象（object）是 JavaScript 最重要的数据结构。ES6 对它进行了重大升级，本章介绍数据结构本身的改变。属性的简洁表示法  12345const foo = &apos;bar&apos;;const baz = &amp;#123;foo&amp;#125;;baz // &amp;#123;foo: &quot;bar&quot;&amp;#125;// 等同于const baz = &amp;#123;foo: foo&amp;#125;;  上面代码">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://yoursite.com/2019/06/14/objectExtend/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ES6对象的扩展 | 露露的笔记</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">露露的笔记</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/14/objectExtend/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content>
+      <meta itemprop="description" content="lulu">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="露露的笔记">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">ES6对象的扩展
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-06-14 09:36:31 / 修改时间：17:45:20" itemprop="dateCreated datePublished" datetime="2019-06-14T09:36:31+08:00">2019-06-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/ES6/" itemprop="url" rel="index"><span itemprop="name">ES6</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="对象的扩展"><a href="#对象的扩展" class="headerlink" title="对象的扩展"></a><strong>对象的扩展</strong></h2><p>对象（object）是 JavaScript 最重要的数据结构。ES6 对它进行了重大升级，本章介绍数据结构本身的改变。<br>属性的简洁表示法 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const foo = <span class="string">'bar'</span>;</span><br><span class="line">const baz = &#123;foo&#125;;</span><br><span class="line">baz // &#123;foo: <span class="string">"bar"</span>&#125;</span><br><span class="line">// 等同于</span><br><span class="line">const baz = &#123;foo: foo&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码表明，ES6 允许在对象之中，直接写变量。这时，属性名为变量名, 属性值为变量的值<br>另一个例子</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> f(x, y) &#123;</span><br><span class="line">  <span class="built_in">return</span> &#123;x, y&#125;;</span><br><span class="line">&#125;</span><br><span class="line">// 等同于</span><br><span class="line"><span class="keyword">function</span> f(x, y) &#123;</span><br><span class="line">  <span class="built_in">return</span> &#123;x: x, y: y&#125;;</span><br><span class="line">&#125;</span><br><span class="line">f(1, 2) // Object &#123;x: 1, y: 2&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法简写</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const o = &#123;</span><br><span class="line">  <span class="function"><span class="title">method</span></span>() &#123;</span><br><span class="line">    <span class="built_in">return</span> <span class="string">"Hello!"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// 等同于</span><br><span class="line"></span><br><span class="line">const o = &#123;</span><br><span class="line">  method: <span class="function"><span class="title">function</span></span>() &#123;</span><br><span class="line">    <span class="built_in">return</span> <span class="string">"Hello!"</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这种写法用于函数的返回值，将会非常方便。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">getPoint</span></span>() &#123;</span><br><span class="line">  const x = 1;</span><br><span class="line">  const y = 10;</span><br><span class="line">  <span class="built_in">return</span> &#123;x, y&#125;;</span><br><span class="line">&#125;</span><br><span class="line">getPoint()</span><br><span class="line">// &#123;x:1, y:10&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CommonJS 模块输出一组变量，就非常合适使用简洁写法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> ms = &#123;&#125;;</span><br><span class="line"><span class="keyword">function</span> getItem (key) &#123;</span><br><span class="line">  <span class="built_in">return</span> key <span class="keyword">in</span> ms ? ms[key] : null;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> setItem (key, value) &#123;</span><br><span class="line">  ms[key] = value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">clear</span></span> () &#123;</span><br><span class="line">  ms = &#123;&#125;;</span><br><span class="line">&#125;</span><br><span class="line">module.exports = &#123; getItem, setItem, clear &#125;;</span><br><span class="line">// 等同于</span><br><span class="line">module.exports = &#123;</span><br><span class="line">  getItem: getItem,</span><br><span class="line">  setItem: setItem,</span><br><span class="line">  clear: clear</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>属性的赋值器（setter）和取值器（getter），事实上也是采用这种写法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">const cart = &#123;</span><br><span class="line">  _wheels: 4,</span><br><span class="line"></span><br><span class="line">  get <span class="function"><span class="title">wheels</span></span> () &#123;</span><br><span class="line">    <span class="built_in">return</span> this._wheels;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="built_in">set</span> wheels (value) &#123;</span><br><span class="line">    <span class="keyword">if</span> (value &lt; this._wheels) &#123;</span><br><span class="line">      throw new Error(<span class="string">'数值太小了！'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    this._wheels = value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>简洁写法的属性名总是字符串，这会导致一些看上去比较奇怪的结果。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const obj = &#123;</span><br><span class="line">  <span class="function"><span class="title">class</span></span> () &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">// 等同于</span><br><span class="line">var obj = &#123;</span><br><span class="line">  <span class="string">'class'</span>: <span class="function"><span class="title">function</span></span>() &#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，class是字符串，所以不会因为它属于关键字，而导致语法解析报错。<br>如果某个方法的值是一个 Generator 函数，前面需要加上星号。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const obj = &#123;</span><br><span class="line">  * <span class="function"><span class="title">m</span></span>() &#123;</span><br><span class="line">    yield <span class="string">'hello world'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="属性名表达式"><a href="#属性名表达式" class="headerlink" title="属性名表达式"></a><strong>属性名表达式</strong></h2><p>JavaScript 定义对象的属性，有两种方法。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 方法一</span><br><span class="line">obj.foo = <span class="literal">true</span>;</span><br><span class="line">// 方法二</span><br><span class="line">obj[<span class="string">'a'</span> + <span class="string">'bc'</span>] = 123;</span><br></pre></td></tr></table></figure>
+
+<p>方法一是直接用标识符作为属性名，方法二是用表达式作为属性名，这时要将表达式放在方括号之内。<br>但是，如果使用字面量方式定义对象（使用大括号），在 ES5 中只能使用方法一（标识符）定义属性。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var obj = &#123;</span><br><span class="line">  foo: <span class="literal">true</span>,</span><br><span class="line">  abc: 123</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>ES6 允许字面量定义对象时，用方法二（表达式）作为对象的属性名，即把表达式放在方括号内。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> propKey = <span class="string">'foo'</span>;</span><br><span class="line"><span class="built_in">let</span> obj = &#123;</span><br><span class="line">  [propKey]: <span class="literal">true</span>,</span><br><span class="line">  [<span class="string">'a'</span> + <span class="string">'bc'</span>]: 123</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>另一个例子</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> lastWord = <span class="string">'last word'</span>;</span><br><span class="line">const a = &#123;</span><br><span class="line">  <span class="string">'first word'</span>: <span class="string">'hello'</span>,</span><br><span class="line">  [lastWord]: <span class="string">'world'</span></span><br><span class="line">&#125;;</span><br><span class="line">a[<span class="string">'first word'</span>] // <span class="string">"hello"</span></span><br><span class="line">a[lastWord] // <span class="string">"world"</span></span><br><span class="line">a[<span class="string">'last word'</span>] // <span class="string">"world"</span></span><br></pre></td></tr></table></figure>
+
+<p>表达式还可以用于定义方法名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> obj = &#123;</span><br><span class="line">  [<span class="string">'h'</span> + <span class="string">'ello'</span>]() &#123;</span><br><span class="line">    <span class="built_in">return</span> <span class="string">'hi'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">obj.hello() // hi</span><br></pre></td></tr></table></figure>
+
+<p>注意，属性名表达式与简洁表示法，不能同时使用，会报错。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 报错</span><br><span class="line">const foo = <span class="string">'bar'</span>;</span><br><span class="line">const bar = <span class="string">'abc'</span>;</span><br><span class="line">const baz = &#123; [foo] &#125;;</span><br><span class="line"></span><br><span class="line">// 正确</span><br><span class="line">const foo = <span class="string">'bar'</span>;</span><br><span class="line">const baz = &#123; [foo]: <span class="string">'abc'</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>注意，属性名表达式如果是一个对象，默认情况下会自动将对象转为字符串[object Object]，这一点要特别小心。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const keyA = &#123;a: 1&#125;;</span><br><span class="line">const keyB = &#123;b: 2&#125;;</span><br><span class="line">const myObject = &#123;</span><br><span class="line">  [keyA]: <span class="string">'valueA'</span>,</span><br><span class="line">  [keyB]: <span class="string">'valueB'</span></span><br><span class="line">&#125;;</span><br><span class="line">myObject // Object &#123;[object Object]: <span class="string">"valueB"</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，[keyA]和[keyB]得到的都是[object Object]，所以[keyB]会把[keyA]覆盖掉，而myObject最后只有一个[object Object]属性。</p>
+<h2 id="方法的-name-属性"><a href="#方法的-name-属性" class="headerlink" title="方法的 name 属性"></a><strong>方法的 name 属性</strong></h2><p>函数的name属性，返回函数名。对象方法也是函数，因此也有name属性。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const person = &#123;</span><br><span class="line">  <span class="function"><span class="title">sayName</span></span>() &#123;</span><br><span class="line">    console.log(<span class="string">'hello!'</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">person.sayName.name   // <span class="string">"sayName"</span></span><br></pre></td></tr></table></figure>
+
+<p>如果对象的方法使用了取值函数（getter）和存值函数（setter），则name属性不是在该方法上面，而是该方法的属性的描述对象的get和set属性上面，返回值是方法名前加上get和set。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const obj = &#123;</span><br><span class="line">  get <span class="function"><span class="title">foo</span></span>() &#123;&#125;,</span><br><span class="line">  <span class="built_in">set</span> foo(x) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line">obj.foo.name</span><br><span class="line">// TypeError: Cannot <span class="built_in">read</span> property <span class="string">'name'</span> of undefined</span><br><span class="line">const descriptor = Object.getOwnPropertyDescriptor(obj, <span class="string">'foo'</span>);</span><br><span class="line">descriptor.get.name // <span class="string">"get foo"</span></span><br><span class="line">descriptor.set.name // <span class="string">"set foo"</span></span><br><span class="line">//Object.getOwnPropertyDescriptor() 方法返回指定对象上一个自有属性对应的属性描述符。（自有属性指的是直接赋予该对象的属性，//不需要从原型链上进行查找的属性）</span><br><span class="line">//语法：Object.getOwnPropertyDescriptor(obj, prop)</span><br></pre></td></tr></table></figure>
+
+<p>有两种特殊情况：bind方法创造的函数，name属性返回bound加上原函数的名字；Function构造函数创造的函数，name属性返回anonymous。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(new Function()).name // <span class="string">"anonymous"</span></span><br><span class="line"></span><br><span class="line">var doSomething = <span class="function"><span class="title">function</span></span>() &#123;</span><br><span class="line">  // ...</span><br><span class="line">&#125;;</span><br><span class="line">doSomething.bind().name // <span class="string">"bound doSomething"</span></span><br></pre></td></tr></table></figure>
+
+<p>如果对象的方法是一个 Symbol 值，那么name属性返回的是这个 Symbol 值的描述</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">const key1 = Symbol(<span class="string">'description'</span>);</span><br><span class="line">const key2 = Symbol();</span><br><span class="line"><span class="built_in">let</span> obj = &#123;</span><br><span class="line">  [key1]() &#123;&#125;,</span><br><span class="line">  [key2]() &#123;&#125;,</span><br><span class="line">&#125;;</span><br><span class="line">obj[key1].name // <span class="string">"[description]"</span></span><br><span class="line">obj[key2].name // <span class="string">""</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="属性的可枚举性和遍历"><a href="#属性的可枚举性和遍历" class="headerlink" title="属性的可枚举性和遍历"></a><strong>属性的可枚举性和遍历</strong></h2><h2 id="可枚举性"><a href="#可枚举性" class="headerlink" title="可枚举性"></a><strong>可枚举性</strong></h2><p>对象的每个属性都有一个描述对象（Descriptor），用来控制该属性的行为。Object.getOwnPropertyDescriptor方法可以获取该属性的描述对象。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> obj = &#123; foo: 123 &#125;;</span><br><span class="line">Object.getOwnPropertyDescriptor(obj, <span class="string">'foo'</span>)</span><br><span class="line">//  &#123;</span><br><span class="line">//    value: 123,</span><br><span class="line">//    writable: <span class="literal">true</span>,</span><br><span class="line">//    enumerable: <span class="literal">true</span>,</span><br><span class="line">//    configurable: <span class="literal">true</span></span><br><span class="line">//  &#125;</span><br></pre></td></tr></table></figure>
+
+<p>描述对象的enumerable属性，称为“可枚举性”，如果该属性为false，就表示某些操作会忽略当前属性。<br>for…in循环：只遍历对象自身的和继承的可枚举的属性。<br>Object.keys()：返回对象自身的所有可枚举的属性的键名。<br>JSON.stringify()：只串行化对象自身的可枚举的属性。<br>Object.assign()： 忽略enumerable为false的属性，只拷贝对象自身的可枚举的属性。<br>前三个是 ES5 就有的，Object.assign()是 ES6 新增的。<br>只有for…in会返回继承的属性，其他三个方法都会忽略继承的属性，只处理对象自身的属性。实际上，引入“可枚举”（enumerable）这个概念的最初目的，就是让某些属性可以规避掉for…in操作，不然所有内部属性和方法都会被遍历到。比如，对象原型的toString方法，以及数组的length属性，就通过“可枚举性”，从而避免被for…in遍历到。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Object.getOwnPropertyDescriptor(Object.prototype, <span class="string">'toString'</span>).enumerable</span><br><span class="line">// <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">Object.getOwnPropertyDescriptor([], <span class="string">'length'</span>).enumerable</span><br><span class="line">// <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>上面代码中，toString和length属性的enumerable都是false，因此for…in不会遍历到这两个继承自原型的属性。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Object.getOwnPropertyDescriptor(class &#123;<span class="function"><span class="title">foo</span></span>() &#123;&#125;&#125;.prototype, <span class="string">'foo'</span>).enumerable</span><br><span class="line">// <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>操作中引入继承的属性会让问题复杂化，大多数时候，我们只关心对象自身的属性。所以，尽量不要用for…in循环，而用Object.keys()代替。</p>
+<h2 id="属性的遍历"><a href="#属性的遍历" class="headerlink" title="属性的遍历"></a><strong>属性的遍历</strong></h2><p>ES6 一共有 5 种方法可以遍历对象的属性。<br>（1）for…in</p>
+<p>for…in循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）。</p>
+<p>（2）Object.keys(obj)</p>
+<p>Object.keys返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名。</p>
+<p>（3）Object.getOwnPropertyNames(obj)</p>
+<p>Object.getOwnPropertyNames返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属性）的键名。</p>
+<p>（4）Object.getOwnPropertySymbols(obj)</p>
+<p>Object.getOwnPropertySymbols返回一个数组，包含对象自身的所有 Symbol 属性的键名。</p>
+<p>（5）Reflect.ownKeys(obj)</p>
+<p>Reflect.ownKeys返回一个数组，包含对象自身的所有键名，不管键名是 Symbol 或字符串，也不管是否可枚举。</p>
+<p>以上的 5 种方法遍历对象的键名，都遵守同样的属性遍历的次序规则。</p>
+<p>首先遍历所有数值键，按照数值升序排列。<br>其次遍历所有字符串键，按照加入时间升序排列。<br>最后遍历所有 Symbol 键，按照加入时间升序排列。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Reflect.ownKeys(&#123; [Symbol()]:0, b:0, 10:0, 2:0, a:0 &#125;)</span><br><span class="line">// [<span class="string">'2'</span>, <span class="string">'10'</span>, <span class="string">'b'</span>, <span class="string">'a'</span>, Symbol()]</span><br></pre></td></tr></table></figure>
+
+<p>Reflect.ownKeys方法返回一个数组，包含了参数对象的所有属性。这个数组的属性次序是这样的，首先是数值属性2和10，其次是字符串属性b和a，最后是 Symbol 属性。</p>
+<h2 id="super-关键字"><a href="#super-关键字" class="headerlink" title="super 关键字"></a><strong>super 关键字</strong></h2><p>this关键字总是指向函数所在的当前对象，ES6 又新增了另一个类似的关键字super，指向当前对象的原型对象。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">const proto = &#123;</span><br><span class="line">  foo: <span class="string">'hello'</span></span><br><span class="line">&#125;;</span><br><span class="line">const obj = &#123;</span><br><span class="line">  foo: <span class="string">'world'</span>,</span><br><span class="line">  <span class="function"><span class="title">find</span></span>() &#123;</span><br><span class="line">    <span class="built_in">return</span> super.foo;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">Object.setPrototypeOf(obj, proto);</span><br><span class="line">obj.find() // <span class="string">"hello"</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，super关键字表示原型对象时，只能用在对象的方法之中，用在其他地方都会报错。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">// 报错</span><br><span class="line">const obj = &#123;</span><br><span class="line">  foo: super.foo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 报错</span><br><span class="line">const obj = &#123;</span><br><span class="line">  foo: () =&gt; super.foo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 报错</span><br><span class="line">const obj = &#123;</span><br><span class="line">  foo: <span class="function"><span class="title">function</span></span> () &#123;</span><br><span class="line">    <span class="built_in">return</span> super.foo</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：目前，只有对象方法的简写法可以让 JavaScript 引擎确认，定义的是对象的方法。所以最后一个也会报错</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ES6/" rel="tag"># ES6</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/13/stringAdd/" rel="next" title="ES6字符串新增方法">
+                <i class="fa fa-chevron-left"></i> ES6字符串新增方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/14/objectFlag/" rel="prev" title="ES6对象的扩展运算符">
+                ES6对象的扩展运算符 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <div class="site-description motion-element" itemprop="description">lulu</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的扩展"><span class="nav-number">1.</span> <span class="nav-text">对象的扩展</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性名表达式"><span class="nav-number">2.</span> <span class="nav-text">属性名表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法的-name-属性"><span class="nav-number">3.</span> <span class="nav-text">方法的 name 属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性的可枚举性和遍历"><span class="nav-number">4.</span> <span class="nav-text">属性的可枚举性和遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可枚举性"><span class="nav-number">5.</span> <span class="nav-text">可枚举性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#属性的遍历"><span class="nav-number">6.</span> <span class="nav-text">属性的遍历</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#super-关键字"><span class="nav-number">7.</span> <span class="nav-text">super 关键字</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"></span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.1.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.1"></script>
+
+  <script src="/js/motion.js?v=7.1.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.1"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.1"></script>
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.1"></script>
+<script src="/js/post-details.js?v=7.1.1"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
